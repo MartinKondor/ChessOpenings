@@ -1,0 +1,36 @@
+
+@charset "UTF-8";
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    overflow-x: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+hr {
+    background-color: rgb(63, 77, 122) !important;
+    height: 2px !important;
+}
+
+@media screen and (max-width: 1200px) {
+    html,body {
+        padding: 15px !important;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    html,body {
+        padding: 5px !important;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    html,body {
+        padding: 1px !important;
+    }
+}
