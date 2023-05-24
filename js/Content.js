@@ -4,6 +4,7 @@ const ContentComponent = () => {
     const [openingName, setOpeningName] = React.useState("");
     const dataset = new Dataset();
 
+    /**
     const testOpening = "Catalan Opening Open Defense";
     return (<main><PositionComponent
         dataset={dataset}
@@ -13,6 +14,7 @@ const ContentComponent = () => {
             }
         }
     /></main>);
+    */
 
     return (<main>
         <hr />
