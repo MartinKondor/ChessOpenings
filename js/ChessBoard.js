@@ -1,21 +1,5 @@
 
-function getMovesAsArray(moves) {
-    let movesList = [];
-
-    for (let line of moves.split(".")) {
-        for (let parts of line.split(" ")) {
-            parts = parts.trim();
-            
-            if (parts.match(/[a-zA-Z]{1,2}[1-8]{1}/ig)) {
-                movesList.push(parts)
-            }
-        }
-    }
-
-    return movesList;
-}
-
-const ChessBoardComponent = ({moves}) => {
+const ChessBoardComponent = ({movesList}) => {
     let black = {
         " ": "♟",
         "N": "♞",
@@ -32,7 +16,19 @@ const ChessBoardComponent = ({moves}) => {
         "Q": "♕",
         "K": "♔"
     };
-    const table = getMovesAsArray(moves);
+
+    // TODO: show opening on the board
+    let T = [
+        black["R"], black["N"], black["B"], black["Q"], black["K"], black["B"], black["N"], black["R"],
+        black[" "], black[" "], black[" "], black[" "], black[" "], black[" "], black[" "], black[" "],
+        " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", " ",
+    ];
+    console.log(T);
 
     return (<table className="chess-board">
         <tbody>
@@ -49,14 +45,14 @@ const ChessBoardComponent = ({moves}) => {
             </tr>
             <tr>
                 <th>8</th>
-                <td className="light">♜</td>
-                <td className="dark">♞</td>
-                <td className="light">♝</td>
-                <td className="dark">♛</td>
-                <td className="light">♚</td>
-                <td className="dark">♝</td>
-                <td className="light">♞</td>
-                <td className="dark">♜</td>
+                <td className="light">{T[0][0]}</td>
+                <td className="dark">{T[0][1]}</td>
+                <td className="light">{T[0][2]}</td>
+                <td className="dark">{T[0][3]}</td>
+                <td className="light">{T[0][4]}</td>
+                <td className="dark">{T[0][5]}</td>
+                <td className="light">{T[0][6]}</td>
+                <td className="dark">{T[0][7]}</td>
             </tr>
             <tr>
                 <th>7</th>

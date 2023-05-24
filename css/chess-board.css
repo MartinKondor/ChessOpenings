@@ -1,3 +1,10 @@
+
+table.chess-board,
+table.chess-board th,
+table.chess-board th {
+    border: 0px !important;
+}
+
 .chess-board {
     margin: 0 auto;
     border-spacing: 0;

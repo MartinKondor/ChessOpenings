@@ -1988,7 +1988,15 @@ class Dataset {
     }
 
     searchOpeningECO(eco) {
-        return [];
+        let names = Object.keys(this.dataset);
+        let similar = [];
+
+        for (let name of names) {
+            if (this.dataset[name][this.columnToIndex("ECO")].match(eco)) {
+                similar.push(name);
+            }
+        }
+        return similar;
     }
 
     getOpeningByName(name) {
@@ -2000,25 +2008,29 @@ class Dataset {
     */
     searchOpening(searchName) {
         let matches = [];
-        searchName.trim().toLowerCase();
+        searchName = searchName.trim().toLowerCase();
         
         if (searchName.match("ruy") || searchName.match("lopez")) {
             searchName = "spanish game";
         }
 
-        if (searchName.length == 2) {
+        /*
+        if (searchName.length == 3) {
             let ecoResults = this.searchOpeningECO(searchName.toUpperCase());
             if (ecoResults.length != 0) {
                 return ecoResults;
             }
         }
+        */
 
         let names = Object.keys(this.dataset);
         for (let name of names) {
             let oname = name;
             name = name.trim().toLowerCase();
-            
-            if (name.match(searchName)) {
+            let altName = name.replaceAll("'", "").replaceAll("-", " ");
+            name = name.replaceAll("'", " ");
+
+            if (name.match(searchName) || altName.match(searchName)) {
                 matches.push(oname);
             }
         }
