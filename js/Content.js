@@ -4,16 +4,15 @@ const ContentComponent = () => {
     const [openingName, setOpeningName] = React.useState("");
     const dataset = new Dataset();
 
-    /*
+    const testOpening = "Catalan Opening Open Defense";
     return (<main><PositionComponent
         dataset={dataset}
         openingObject={
             {
-                "Alekhine Defense Balogh Variation": dataset.getOpeningByName("Alekhine Defense Balogh Variation")
+                [testOpening]: dataset.getOpeningByName(testOpening)
             }
         }
     /></main>);
-    */
 
     return (<main>
         <hr />

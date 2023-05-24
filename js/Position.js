@@ -64,18 +64,18 @@ const PositionComponent = ({dataset, openingObject}) => {
     const precentageOfWhiteToWins = get(openingObject, "perc_white_win");
     const precentageOfBlackToWins = get(openingObject, "perc_black_win");
 
-    return (<div className="text-center">
-        <h2>
+    return (<div>
+        <h2 className="text-center">
             <strong>{openingName}</strong>:
         </h2>
 
         <div className="row">
-            <div className="col-sm">
+            <div className="col-sm text-center">
                 <ChessBoardComponent
                     moves={movesList}
                 /> 
             </div>
-            <div className="col-sm">
+            <div className="col-sm text-left">
                 <p className="mt-2">
                     Played with {
                         <span
