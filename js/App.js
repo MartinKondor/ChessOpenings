@@ -1,5 +1,5 @@
 
-const MainComponent = () => {
+const App = () => {
     return (<div className="container">
         <HeaderComponent />
         <ContentComponent />
@@ -7,7 +7,12 @@ const MainComponent = () => {
     </div>);
 };
 
+/*
 ReactDOM.render(
-    <MainComponent />,
+    <App />,
     document.getElementById("root")
 );
+*/
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);

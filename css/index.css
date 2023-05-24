@@ -17,6 +17,10 @@ hr {
     height: 2px !important;
 }
 
+/* See https://github.com/MartinKondor/ChessOpenings/blob/main/lib/bootstrap.min.css#L3769 */
+.dropdown-menu {opacity: 0 !important}
+.dropdown-menu.show {opacity: 1 !important}
+
 @media screen and (max-width: 1200px) {
     html,body {
         padding: 15px !important;

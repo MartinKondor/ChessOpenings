@@ -1885,129 +1885,144 @@ Slav Indian,black,1514,A50,2018-07-05,2259,2300,26.4,36.1,37.5,"['1.d4', 'Nf6', 
 "Zukertort Opening, Wade Defense, Chigorin Plan",black,217,A41,2018-02-10,2307,2380,21.7,34.1,44.2,"['1.Nf3', 'd6', '2.d4', 'Bg4', '3.c4', 'Nd7', '4.Qb3', 'Rb8']",Nf3,d6,d4,Bg4,c4,Nd7,Qb3,Rb8,44.2,21.7,2.036866359447005,95.91400000000002,47.089
 `;
 
-/**
- * Returns the dataset as a json object, where each key is the openings name
- */
-function loadDataset() {
-    let lines = datasetRaw.split("\n");
-    lines = lines.slice(1);  // Remove the first line
-    let obj = {};
+class Dataset {
 
-    for (let line of lines) {
-        line = line.trim();
-        if (line == null || line.length == 0) {
-            continue;
-        }
+    constructor() {
+        this.dataset = this.loadDataset();
+        // datasetRaw = "";
 
-        let tempValues = line.split(",");
-        let values = [];
-        let currentValue = "";
-
-        // Merge the " values
-        for (let tempValue of tempValues) {
-            if (tempValue.charAt(0) == '"') {
-                inValue = true;
-                currentValue += tempValue;
-                continue;
-            }
-            else if (inValue && tempValue.charAt(tempValue.length - 1) == '"') {
-                inValue = false;
-                currentValue += tempValue;
-                values.push(currentValue);
-                currentValue = "";
-                continue;
-            }
-            
-            if (!inValue) {
-                values.push(tempValue);
-                continue;
-            }
-
-            if (inValue) {
-                currentValue += tempValue;
-            }
-        }
-
-        for (let i = 1; i <= values.length - 1; i++) {
-            let openingName = values[0].replace('"', "").replace('\"', "");
-            let currentValue = values[i].replace('"', "").replace('\"', "");
-
-            if (Object.keys(obj).indexOf(openingName) == -1) {
-                obj[openingName] = [currentValue];
-            }
-            else {
-                obj[openingName].push(currentValue);
-            }
-        }
+        this.columnIndices = {
+            // "opening_name": -1,
+            "side": 0,
+            "num_games": 1,
+            "ECO": 2,
+            "last_played_date": 3,
+            "perf_rating": 4,
+            "avg_player": 5,
+            "perc_player_win": 6,
+            "perc_draw": 7,
+            "pec_opponent_win": 8,
+            "moves_list": 9,
+            "move1w": 10,
+            "move1b": 11,
+            "move2w": 12,
+            "move2b": 13,
+            "move3w": 14,
+            "move3b": 15,
+            "move4w": 16,
+            "move4b": 17,
+            "perc_white_win": 18,
+            "perc_black_win": 19,
+            "white_odds": 20,
+            "white_wins": 21,
+            "black_win": 22
+        };
     }
 
-    return obj;
-}
+    /**
+     * Returns the dataset as a json object, where each key is the openings name
+     */
+    loadDataset() {
+        let lines = datasetRaw.split("\n");
+        lines = lines.slice(1);  // Remove the first line
+        let obj = {};
 
-function columnToIndex(columnName) {
-    return columnIndices[columnName];
-}
+        for (let line of lines) {
+            line = line.trim();
+            if (line == null || line.length == 0) {
+                continue;
+            }
 
-function indexToColumn(index) {
-    return Object.keys(columnIndices)[index];
-}
+            let tempValues = line.split(",");
+            let values = [];
+            let currentValue = "";
+            let inValue = false;
 
-function searchOpeningECO(eco) {
-    return "unsupported";
-}
+            // Merge the " values
+            for (let tempValue of tempValues) {
+                if (tempValue.charAt(0) == '"') {
+                    inValue = true;
+                    currentValue += tempValue;
+                    continue;
+                }
+                else if (inValue && tempValue.charAt(tempValue.length - 1) == '"') {
+                    inValue = false;
+                    currentValue += tempValue;
+                    values.push(currentValue);
+                    currentValue = "";
+                    continue;
+                }
+                
+                if (!inValue) {
+                    values.push(tempValue);
+                    continue;
+                }
 
-/**
-*  Return openings with similar names
-*/
-function searchOpening(searchName) {
-    let matches = [];
-    searchName.trim().toLowerCase();
-    
-    if (searchName.match("ruy") || searchName.match("lopez")) {
-        searchName = "spanish game";
+                if (inValue) {
+                    currentValue += tempValue;
+                }
+            }
+
+            for (let i = 1; i <= values.length - 1; i++) {
+                let openingName = values[0].replace('"', "").replace('\"', "");
+                let currentValue = values[i].replace('"', "").replace('\"', "");
+
+                if (Object.keys(obj).indexOf(openingName) == -1) {
+                    obj[openingName] = [currentValue];
+                }
+                else {
+                    obj[openingName].push(currentValue);
+                }
+            }
+        }
+
+        return obj;
     }
 
-    if (searchName.length == 3) {
-        return searchOpeningECO(searchName.toUpperCase());
+    columnToIndex(columnName) {
+        return this.columnIndices[columnName];
     }
 
-    let names = Object.keys(dataset);
-    for (let name of names) {
-        name = name.trim().toLowerCase();
+    indexToColumn(index) {
+        return Object.keys(this.columnIndices)[index];
+    }
+
+    searchOpeningECO(eco) {
+        return [];
+    }
+
+    getOpeningByName(name) {
+        return this.dataset[name];
+    }
+
+    /**
+    *  Return openings with similar names
+    */
+    searchOpening(searchName) {
+        let matches = [];
+        searchName.trim().toLowerCase();
         
-        if (name.match(searchName)) {
-            matches.push(name);
+        if (searchName.match("ruy") || searchName.match("lopez")) {
+            searchName = "spanish game";
         }
+
+        if (searchName.length == 2) {
+            let ecoResults = this.searchOpeningECO(searchName.toUpperCase());
+            if (ecoResults.length != 0) {
+                return ecoResults;
+            }
+        }
+
+        let names = Object.keys(this.dataset);
+        for (let name of names) {
+            let oname = name;
+            name = name.trim().toLowerCase();
+            
+            if (name.match(searchName)) {
+                matches.push(oname);
+            }
+        }
+        return matches;
     }
-    return matches;
+
 }
-
-const columnIndices = {
-    // "opening_name": -1,
-    "side": 0,
-    "num_games": 1,
-    "ECO": 2,
-    "last_played_date": 3,
-    "perf_rating": 4,
-    "avg_player": 5,
-    "perc_player_win": 6,
-    "perc_draw": 7,
-    "pec_opponent_win": 8,
-    "moves_list": 9,
-    "move1w": 10,
-    "move1b": 11,
-    "move2w": 12,
-    "move2b": 13,
-    "move3w": 14,
-    "move3b": 15,
-    "move4w": 16,
-    "move4b": 17,
-    "perc_white_win": 18,
-    "perc_black_win": 19,
-    "white_odds": 20,
-    "white_wins": 21,
-    "black_win": 22
-};
-
-const dataset = loadDataset();
-datasetRaw = "";

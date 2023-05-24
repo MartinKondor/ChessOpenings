@@ -1,22 +1,8 @@
+// TODO: Make an opening browser, where I can select if I want black or white openings
+// TODO: Openings should be viewable on the board, where I can step forward and backwards too
 
-const SearchComponent = () => {
-    // TODO: Dropdown menu to choose from
-
-    return (<div className="row">
-        <div className="col-sm-4"></div>
-        <div className="col-sm">
-            <input className="form-control" placeholder="Search for an opening by name or ECO..." />
-        </div>
-        <div className="col-sm-1">
-            <button className="btn btn-primary" title="Search">
-                <i className="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </div>
-        <div className="col-sm-3"></div>
-    </div>);
-};  // / SearchComponent
-
-const PositionComponent = ({moves, openingsName}) => {
+const PositionComponent = ({dataset, openingObject}) => {
+    let openingName = Object.keys(openingObject)[0];
 
     function formatMoves(movesList) {
         let rows = [];
@@ -29,7 +15,7 @@ const PositionComponent = ({moves, openingsName}) => {
                 row += " " + movesList[i + 1];
             }
 
-            rows.push(<span>{row}<br /></span>);
+            rows.push(<span key={i}>{row}<br /></span>);
             niceIndex++;
         }
 
@@ -38,9 +24,10 @@ const PositionComponent = ({moves, openingsName}) => {
         </div>);
     }
 
+    // TODO: Format the opening to be nice to view
     return (<div className="text-center">
         <h2>
-            <strong>{openingsName}</strong>:
+            <strong>{openingName}</strong>:
         </h2>
 
         {/* 
@@ -56,26 +43,38 @@ const PositionComponent = ({moves, openingsName}) => {
         </div>
         */}
 
-        {formatMoves(getMovesAsArray(moves))}
+    {openingObject[openingName].map((value, index) => {
+        return (<p
+            key={index}>
+                {dataset.indexToColumn(index)}: {value}
+        </p>);
+    })}
 
     </div>);
 };  // / PositionComponent
 
 const ContentComponent = () => {
-    // TODO: Dont make a position component until a search was made
-    let hasResult = false;
+    const [openingName, setOpeningName] = React.useState("");
+    const dataset = new Dataset();
 
     return (<main>
         <hr />
-        <SearchComponent />
+        <SearchComponent
+            dataset={dataset}
+            setOpeningName={setOpeningName}
+        />
         <div className="mt-4"></div>
 
         {
-            hasResult ? null :
+            openingName.length!=0 ?
             <PositionComponent
-                moves="1. e4 d5 2. Nf3 Nc6 3. Bb5"
-                openingsName="Ruy Lopez"
-            />
+                dataset={dataset}
+                openingObject={
+                    {
+                        [openingName]: dataset.getOpeningByName(openingName)
+                    }
+                }
+            /> : null
         }
         <div className="mb-4"></div>
     </main>);
